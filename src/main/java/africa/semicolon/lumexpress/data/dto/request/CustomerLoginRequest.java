@@ -9,9 +9,8 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class CustomerLoginRequest {
-    private String country;
     private String email;
     private String password;
-    private Address address;
+
 
 }

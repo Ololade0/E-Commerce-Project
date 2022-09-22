@@ -11,4 +11,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CustomerRegisterResponse {
     private String message;
+    private int code;
 }

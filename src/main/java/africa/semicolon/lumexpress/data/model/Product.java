@@ -22,6 +22,7 @@ public class Product {
     private BigDecimal price;
     private int quantity;
 
+
     @ElementCollection
     private List<Category> category;
     private String imageUrl;

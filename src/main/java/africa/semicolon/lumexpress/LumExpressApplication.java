@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class LumExpressApplication {
 
 	public static void main(String[] args) {
-
 		SpringApplication.run(LumExpressApplication.class, args);
 	}
 

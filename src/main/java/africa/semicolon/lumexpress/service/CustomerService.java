@@ -7,7 +7,10 @@ import africa.semicolon.lumexpress.data.dto.response.CustomerLoginResponse;
 import africa.semicolon.lumexpress.data.dto.response.CustomerRegisterResponse;
 
 public interface CustomerService {
-    CustomerRegisterResponse register(CustomerRegisterRequest customerRegisterRequest);
+    CustomerRegisterResponse registerCUstomer(CustomerRegisterRequest customerRegisterRequest);
+
     CustomerLoginResponse login(CustomerLoginRequest loginRequest);
     String completeProfile(UpdateCustomerDetails updateCustomerDetails);
+
+
 }

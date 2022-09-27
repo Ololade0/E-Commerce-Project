@@ -25,7 +25,6 @@ public class CustomerServicesImpl implements CustomerService{
     @Override
     public CustomerRegisterResponse registerCUstomer(CustomerRegisterRequest customerRegisterRequest) {
         Customer customer = modelMapper.map(customerRegisterRequest, Customer.class);
-      //  Cart cart = cartService.create();
         customer.setCart(new Cart());
         var customerAddress = new Address();
         customerAddress.setCountry(customerAddress.getCountry());

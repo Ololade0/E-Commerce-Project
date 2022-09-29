@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @Setter
 @Getter
-public class CreateProductResponse {
+public class AddProductResponse {
     private Long productId;
     private String message;
     private int code;

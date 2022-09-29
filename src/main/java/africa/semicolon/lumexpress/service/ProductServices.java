@@ -1,17 +1,18 @@
 package africa.semicolon.lumexpress.service;
 
-import africa.semicolon.lumexpress.data.dto.request.CreateProductRequest;
+import africa.semicolon.lumexpress.data.dto.request.AddProductRequest;
 import africa.semicolon.lumexpress.data.dto.request.UpdateProductRequest;
-import africa.semicolon.lumexpress.data.dto.response.CreateProductResponse;
+import africa.semicolon.lumexpress.data.dto.response.AddProductResponse;
 import africa.semicolon.lumexpress.data.model.Product;
+import org.springframework.data.domain.Page;
 
-import java.util.List;
+import java.io.IOException;
 
 public interface ProductServices {
-    CreateProductResponse create(CreateProductRequest createProductRequest) ;
+    AddProductResponse addProduct(AddProductRequest createProductRequest) throws IOException;
     String updateProductDetails(UpdateProductRequest updateProductRequest);
     Product getProductById(Long id);
-    List<Product> getAllProducts();
+    Page<Product> getAllProducts();
     String deleteProduct(Long id);
 
 }

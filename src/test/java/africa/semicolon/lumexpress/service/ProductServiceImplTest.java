@@ -1,8 +1,10 @@
 package africa.semicolon.lumexpress.service;
 
 import africa.semicolon.lumexpress.data.dto.request.AddProductRequest;
+import africa.semicolon.lumexpress.data.dto.request.GetAllItemstRequest;
 import africa.semicolon.lumexpress.data.dto.response.AddProductResponse;
 import africa.semicolon.lumexpress.data.model.Product;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import java.nio.file.Paths;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
+@Slf4j
 class ProductServiceImplTest {
     @Autowired
     private ProductServices productServices;
@@ -65,9 +68,18 @@ class ProductServiceImplTest {
 
     @Test
     void getAllProducts() throws IOException {
-        Page<Product> productPage = productServices.getAllProducts();
+        productServices.addProduct(createProductRequest);
+        var getAllItemstRequest = buildGetItemRequest();
+        Page<Product> productPage = productServices.getAllProducts(getAllItemstRequest);
+        log.info("page contents::{}", productPage);
         assertThat(productPage).isNotNull();
         assertThat(productPage.getTotalElements()).isGreaterThan(0);
+    }
+    private GetAllItemstRequest buildGetItemRequest(){
+        return GetAllItemstRequest
+                .builder().numberOfItemsProductsPerPage(8)
+                .pageNumber(1)
+                .build();
     }
 
     @Test

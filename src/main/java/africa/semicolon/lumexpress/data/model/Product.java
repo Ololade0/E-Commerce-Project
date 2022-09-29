@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Builder
-
+@ToString
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

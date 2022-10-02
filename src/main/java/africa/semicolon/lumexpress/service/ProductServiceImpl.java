@@ -4,6 +4,7 @@ import africa.semicolon.lumexpress.data.dto.request.AddProductRequest;
 import africa.semicolon.lumexpress.data.dto.request.GetAllItemstRequest;
 import africa.semicolon.lumexpress.data.dto.request.UpdateProductRequest;
 import africa.semicolon.lumexpress.data.dto.response.AddProductResponse;
+import africa.semicolon.lumexpress.data.dto.response.UpdateProductResponse;
 import africa.semicolon.lumexpress.data.model.Category;
 import africa.semicolon.lumexpress.data.model.Product;
 import africa.semicolon.lumexpress.data.repository.ProductRepository;
@@ -53,7 +54,13 @@ public class ProductServiceImpl implements ProductServices {
 
 
     @Override
-    public String updateProductDetails(UpdateProductRequest updateProductRequest){
+    public UpdateProductResponse updateProductDetails(UpdateProductRequest updateProductRequest){
+        productRepository.findById(updateProductRequest.getProductId()).orElseThrow(()-> new ProductNotFoundException(
+                String.format("product with id %d not found" )
+        )
+
+
+
         return null;
     }
 //THe first way of getting productbyid

@@ -2,7 +2,9 @@ package africa.semicolon.lumexpress.service;
 
 import africa.semicolon.lumexpress.data.dto.request.AddProductRequest;
 import africa.semicolon.lumexpress.data.dto.request.GetAllItemstRequest;
+import africa.semicolon.lumexpress.data.dto.request.UpdateProductRequest;
 import africa.semicolon.lumexpress.data.dto.response.AddProductResponse;
+import africa.semicolon.lumexpress.data.dto.response.UpdateProductResponse;
 import africa.semicolon.lumexpress.data.model.Product;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,13 +28,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ProductServiceImplTest {
     @Autowired
     private ProductServices productServices;
-    AddProductRequest createProductRequest;
+  private AddProductRequest addProductRequest;
+  private AddProductResponse addProductResponse;
 
     @BeforeEach
     void setUp() throws IOException {
         Path path = Paths.get("/home/lolade/Downloads/peakmilk.jpeg");
         MultipartFile file = new MockMultipartFile("peak", Files.readAllBytes(path));
-        createProductRequest = AddProductRequest
+
+        addProductRequest = AddProductRequest
                 .builder().productName("Milk")
                 .category("Beverages")
                 .price(BigDecimal.valueOf(30.0))
@@ -43,7 +47,7 @@ class ProductServiceImplTest {
 
     @Test
     void addProductTest() throws IOException {
-        AddProductResponse addProductResponse =    productServices.addProduct(createProductRequest);
+        AddProductResponse addProductResponse =    productServices.addProduct(addProductRequest);
         assertThat(addProductResponse).isNotNull();
         assertThat(addProductResponse.getProductId()).isGreaterThan(0L);
         assertThat(addProductResponse.getMessage()).isNotNull();
@@ -54,13 +58,26 @@ class ProductServiceImplTest {
 
     @Test
     void updateProductDetails() {
+        UpdateProductRequest updateProductRequest = buildUpdateRequest();
+        UpdateProductResponse updateResponse = productServices.updateProductDetails(updateProductRequest);
+        assertThat(updateResponse).isNotNull();
+        assertThat(updateResponse.getStatusCode()).isEqualTo(201);
+
     }
+private UpdateProductRequest buildUpdateRequest(){
+        return UpdateProductRequest
+                .builder().price(BigDecimal.valueOf(40.0))
+                .description("its just a milo")
+                .quantity(10)
+                .productId(1L)
+                .build();
+}
 
 
     @Test
     void getOneProductById() throws IOException {
         var response =
-        productServices.addProduct(createProductRequest);
+        productServices.addProduct(addProductRequest);
         Product foundProduct = productServices.getProductById(response.getProductId());
         assertThat(foundProduct).isNotNull();
         assertThat(foundProduct.getId()).isEqualTo(response.getProductId());
@@ -68,7 +85,7 @@ class ProductServiceImplTest {
 
     @Test
     void getAllProducts() throws IOException {
-        productServices.addProduct(createProductRequest);
+        productServices.addProduct(addProductRequest);
         var getAllItemstRequest = buildGetItemRequest();
         Page<Product> productPage = productServices.getAllProducts(getAllItemstRequest);
         log.info("page contents::{}", productPage);

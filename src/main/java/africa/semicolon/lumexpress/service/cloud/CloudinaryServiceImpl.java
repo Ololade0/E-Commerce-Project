@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.Map;
 @Service
-//@AllArgsConstructor
+@AllArgsConstructor
 public class CloudinaryServiceImpl implements CloudService {
 //    @Value("${cloudinary.cloud.name}")
 //    private final String CLOUD_NAME;
@@ -23,12 +23,7 @@ public class CloudinaryServiceImpl implements CloudService {
 //    private final  String API_SECRET;
 
 
-    private Cloudinary cloudinary = new Cloudinary(ObjectUtils
-            .asMap("cloud_name",
-                    "dykaxirq0", "api_key",
-                    "223476997743328",
-                    "api_secret", "6pFoSWZB34EC30rk5IS5iDRIhUg",
-                    "secure", true));
+    private final Cloudinary cloudinary ;
 
 
     @Override

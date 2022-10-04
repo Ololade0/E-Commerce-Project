@@ -56,12 +56,9 @@ public class ProductServiceImpl implements ProductServices {
     @Override
     public UpdateProductResponse updateProductDetails(UpdateProductRequest updateProductRequest){
         productRepository.findById(updateProductRequest.getProductId()).orElseThrow(()-> new ProductNotFoundException(
-                String.format("product with id %d not found" )
-        )
-
-
-
-        return null;
+                String.format("product with id %d not found" ,updateProductRequest.getProductId())
+        ));
+      return null;
     }
 //THe first way of getting productbyid
 //    @Override

@@ -14,14 +14,16 @@ import java.util.List;
 @Builder
 @ToString
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
     private BigDecimal price;
     private int quantity;
+    private String description;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<Category> categories = new ArrayList<>();
     private String imageUrl;
 }

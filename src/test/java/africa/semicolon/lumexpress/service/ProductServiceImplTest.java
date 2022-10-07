@@ -6,6 +6,15 @@ import africa.semicolon.lumexpress.data.dto.request.UpdateProductRequest;
 import africa.semicolon.lumexpress.data.dto.response.AddProductResponse;
 import africa.semicolon.lumexpress.data.dto.response.UpdateProductResponse;
 import africa.semicolon.lumexpress.data.model.Product;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jackson.jsonpointer.JsonPointer;
+import com.github.fge.jackson.jsonpointer.JsonPointerException;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
+import com.github.fge.jsonpatch.RemoveOperation;
+import com.github.fge.jsonpatch.ReplaceOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +29,7 @@ import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -57,21 +67,26 @@ class ProductServiceImplTest {
 
 
     @Test
-    void updateProductDetails() {
-        UpdateProductRequest updateProductRequest = buildUpdateRequest();
-        UpdateProductResponse updateResponse = productServices.updateProductDetails(updateProductRequest);
+    void updateProductDetails() throws IOException, JsonPointerException, JsonPatchException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode value = mapper.readTree("10.00");
+        JsonPatch patch = new JsonPatch(List.of(new ReplaceOperation(new JsonPointer("/price"), value)));
+
+
+        UpdateProductResponse updateResponse = productServices.updateProductDetails(1L, patch);
         assertThat(updateResponse).isNotNull();
         assertThat(updateResponse.getStatusCode()).isEqualTo(201);
+     //   assertThat(productServices.getProductById(1L).getPrice()).isEqualTo(10.00);
 
     }
-private UpdateProductRequest buildUpdateRequest(){
-        return UpdateProductRequest
-                .builder().price(BigDecimal.valueOf(40.0))
-                .description("its just a milo")
-                .quantity(10)
-                .productId(1L)
-                .build();
-}
+//private UpdateProductRequest buildUpdateRequest(){
+//        return UpdateProductRequest
+//                .builder().price(BigDecimal.valueOf(40.0))
+//                .description("its just a milo")
+//                .quantity(10)
+//                .productId(1L)
+//                .build();
+//}
 
 
     @Test

@@ -2,7 +2,7 @@ package africa.semicolon.lumexpress.service;
 
 import africa.semicolon.lumexpress.data.dto.request.AddProductRequest;
 import africa.semicolon.lumexpress.data.dto.request.GetAllItemstRequest;
-import africa.semicolon.lumexpress.data.dto.request.UpdateProductRequest;
+
 import africa.semicolon.lumexpress.data.dto.response.AddProductResponse;
 import africa.semicolon.lumexpress.data.dto.response.UpdateProductResponse;
 import africa.semicolon.lumexpress.data.model.Category;
@@ -11,6 +11,11 @@ import africa.semicolon.lumexpress.data.repository.ProductRepository;
 import africa.semicolon.lumexpress.exception.ProductNotFoundException;
 import africa.semicolon.lumexpress.service.cloud.CloudService;
 import com.cloudinary.utils.ObjectUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +35,7 @@ public class ProductServiceImpl implements ProductServices {
     private final ProductRepository productRepository;
     private final ModelMapper modelMapper = new ModelMapper();
     private final CloudService cloudService;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
 
     @Override
@@ -54,12 +60,42 @@ public class ProductServiceImpl implements ProductServices {
 
 
     @Override
-    public UpdateProductResponse updateProductDetails(UpdateProductRequest updateProductRequest){
-        productRepository.findById(updateProductRequest.getProductId()).orElseThrow(()-> new ProductNotFoundException(
-                String.format("product with id %d not found" ,updateProductRequest.getProductId())
+    public UpdateProductResponse updateProductDetails(Long productId, JsonPatch patch){
+      var foundProduct =   productRepository.findById(productId).orElseThrow(()-> new ProductNotFoundException(
+                String.format("product with id %d not found" ,productId)
         ));
-      return null;
+      Product updatedProduct = applyPatchProduct(patch, foundProduct);
+      Product savedProduct = productRepository.save(updatedProduct);
+      return buildUpdateResponse(savedProduct);
     }
+
+    private Product applyPatchProduct(JsonPatch patch, Product foundProduct)  {
+        try {
+            JsonNode node = objectMapper.convertValue(foundProduct, JsonNode.class);
+            JsonNode patchedNode = patch.apply(node);
+            return objectMapper.treeToValue(patchedNode, Product.class);
+        }
+        catch (JsonPatchException | JsonProcessingException exception){
+            exception.printStackTrace();
+            return null;
+        }
+    }
+
+    private UpdateProductResponse buildUpdateResponse(Product savedProduct){
+        return UpdateProductResponse.builder()
+                .price(savedProduct.getPrice())
+                .description(savedProduct.getDescription())
+                .productName(savedProduct.getName())
+                .statusCode(201)
+                .message("Product updated successfully")
+                .build();
+    }
+
+
+
+
+
+
 //THe first way of getting productbyid
 //    @Override
 //    public Product getProductById(Long id) {

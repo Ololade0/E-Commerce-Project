@@ -64,8 +64,6 @@ class ProductServiceImplTest {
         assertThat(addProductResponse.getCode()).isEqualTo(201);
     }
 
-
-
     @Test
     void updateProductDetails() throws IOException, JsonPointerException, JsonPatchException {
         ObjectMapper mapper = new ObjectMapper();

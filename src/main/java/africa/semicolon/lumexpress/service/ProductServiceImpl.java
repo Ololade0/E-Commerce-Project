@@ -55,7 +55,6 @@ public class ProductServiceImpl implements ProductServices {
                     .productId(savedProduct.getId())
                     .message("product added successfully")
                     .build();
-
         }
 
 

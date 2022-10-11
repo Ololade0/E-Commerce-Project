@@ -13,18 +13,8 @@ import java.util.Map;
 @Service
 @AllArgsConstructor
 public class CloudinaryServiceImpl implements CloudService {
-//    @Value("${cloudinary.cloud.name}")
-//    private final String CLOUD_NAME;
-//
-//    @Value("${cloudinary.api.key}")
-//    private final  String API_KEY;
-//
-//    @Value("${cloudinary.api.secret}")
-//    private final  String API_SECRET;
-
 
     private final Cloudinary cloudinary ;
-
 
     @Override
     public String upload(byte[] imageBytes, Map<?, ?> map) throws IOException {
